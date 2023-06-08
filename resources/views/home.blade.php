@@ -9,7 +9,6 @@
         </div>
         <div class="row">
             <div class="col-9">You have <strong>{{ $books->count() }}</strong> book/s in your library.</div>
-            {{-- <div class="col-3"><button class="btn btn-primary" data-toggle="modal" data-target="#searchmodal">Add book</button> --}}
             <div class="col-3"><button class="btn btn-primary" data-toggle="modal" data-target="#createmodal">Add book</button>
             </div>
 
@@ -22,8 +21,6 @@
                         <th scope="col">Status</th>
                         <th scope="col">Book cover</th>
                         <th scope="col">@sortablelink('title', 'Title')</th>
-                        {{-- <th scope="col">@sortablelink('author', 'Author')</th> --}}
-                        {{-- <th scope="col">Actions</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -35,10 +32,6 @@
                                 <form action="books/order" method="post">
                                     @csrf
                                     <input type="hidden" name="book_id" value="{{ $book->id }}" />
-                                    {{-- <button class="btn btn-success m-1" type="submit" name="up"
-                                        value="up">Up</button>
-                                    <button class="btn btn-danger m-1" type="submit" name="down"
-                                        value="down">Down</button> --}}
                                 </form>
                             </td>
                             <td>
@@ -51,28 +44,7 @@
                             </td>
                             <td>
                                 <h5>{{ $book->title }}</h5>
-                                {{-- @if (isset($book->description))
-                                    <p>{{ strlen($book->description) > 100 ? substr($book->description, 0, 100) . '...' : $book->description }}
-                                    </p>
-                                @endif --}}
                             </td>
-                            {{-- <td>
-                                <ul>
-                                    @php
-                                        $authors = json_decode(stripslashes($book->author));
-                                        
-                                    @endphp
-                                    @foreach ($authors as $author)
-                                        <li>{{ $author }}</li>
-                                    @endforeach
-
-                                </ul>
-
-                            </td> --}}
-                            {{-- <td>
-                                <a class="btn btn-primary m-1" href="books/view/{{ $book->google_id }}">View</a>
-                                <a class="btn btn-danger m-1" href="books/remove/{{ $book->google_id }}">Remove</a>
-                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>

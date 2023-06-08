@@ -32,23 +32,7 @@
                     src="{{ isset($book->volumeInfo->imageLinks) ? $book->volumeInfo->imageLinks->thumbnail : '' }}"
                     width="100" /></div>
             <div class="col-9">
-                {{-- <h3>Author</h3>
-            <ul>
-            @foreach ($book->volumeInfo->authors as $author)
-                <li>{{ $author }}</li>
-            @endforeach
-            </ul>
-            <hr/>
-            <h3>Publisher</h3>
-            <span>{{ $book->volumeInfo->publisher }}  - {{ $book->volumeInfo->publishedDate }}</span>
-            <hr/>
-            <h3>ISBN</h3>
-            <ul>
-                @foreach ($book->volumeInfo->industryIdentifiers as $isbn)
-                    <li>{{ $isbn->type }} : {{ $isbn->identifier }}</li>
-                @endforeach
-            </ul>
-            <hr/> --}}
+
                 <h3>Description</h3>
                 <hr />
                 <div>{!! $description !!} </div>
