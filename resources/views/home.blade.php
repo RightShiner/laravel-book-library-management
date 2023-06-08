@@ -2,18 +2,25 @@
 
 @section('content')
     <div class="container">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <div class="row">
             <div>
-                <h1>{{ Auth::user()->name }}'s library</h1>
+                <h1><span id="username">{{ Auth::user()->name }}</span>'s library</h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-9">You have <strong>{{ $books->count() }}</strong> book/s in your library.</div>
-            <div class="col-3"><button class="btn btn-primary" data-toggle="modal" data-target="#createmodal">Add book</button>
+            <div class="col-9">You have <span>{{ $books->count() }}</span> book/s in your library.</div>
+            <div class="col-3">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#createmodal">Add book</button>
+                <button class="btn btn-success" id="save-button" onclick="save()">
+
+                    Save status
+                </button>
             </div>
 
         </div>
-        <div class="row p-3">
+        <div class="row
+                    p-3">
             <table class="table">
                 <thead>
                     <tr>
@@ -103,4 +110,34 @@
             </div>
         </div>
     </div>
+    <script>
+        function save() {
+            var checkboxes = document.querySelectorAll('input[type=checkbox]');
+            var checkboxStatuses = Array.from(checkboxes).map((checkbox) => {
+                return checkbox.checked ? '1' : '0';
+            });
+            var book_ids = document.querySelectorAll('strong');
+            var bookIdStatuses = Array.from(book_ids).map((book_id) => {
+                return book_id.innerHTML;
+            });
+            var username = document.getElementById("username").innerHTML;
+            var data = [
+                username, checkboxStatuses, bookIdStatuses
+            ];
+            // console.log(window.location.origin);
+            url = window.location.origin + "/book/savestatus";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]')
+                .content); // Add this line to set the CSRF token header
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
+    </script>
 @endsection

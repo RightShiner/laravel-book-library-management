@@ -192,4 +192,19 @@ class BookController extends Controller
         return redirect('/home?sort=userOrder&direction=asc');
     }
 
+    public function saveStatus(Request $request)
+    {
+        $user_id = DB::select('select id from users where users.name = ?', [$request[0]]);
+        $user_id = $user_id[0]->id;
+        $statuses = $request[1];
+        $userOrders = $request[2];
+        for ($i = 0; $i < count($userOrders); $i++) {
+            $affected = DB::table('books')
+                ->where('userOrder', (int) $userOrders[$i])
+                ->update(['status' => (int) $statuses[$i], 'user_id' => $user_id]);
+        }
+
+        return $userOrders;
+    }
+
 }

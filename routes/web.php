@@ -25,4 +25,5 @@ Route::get('/book/create', 'BookController@create');
 Route::get('/book/{bookId}', 'BookController@view');
 Route::get('/book/add/{bookId}', 'BookController@add');
 Route::get('/book/remove/{bookId}', 'BookController@remove');
+Route::post('/book/savestatus', 'BookController@saveStatus');
 Route::post('/books/order', 'BookController@store');
