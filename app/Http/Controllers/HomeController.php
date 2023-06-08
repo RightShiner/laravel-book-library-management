@@ -24,7 +24,9 @@ class HomeController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $books =  Book::sortable()->where('books.user_id', '=', $userId)->paginate(5);
+        // $books =  Book::sortable()->where('books.user_id', '=', $userId)->paginate(5);
+        $books =  Book::sortable()->paginate(5);
+        // dd(compact('books'));
         return view('home',
             compact('books'));
     }
