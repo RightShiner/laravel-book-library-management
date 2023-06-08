@@ -21,9 +21,6 @@
             <div class="col-3">
                 @if (in_array($book->id, $listedbooks))
                     <a class="btn btn-danger m-1" href="remove/{{ $book->id }}">Remove</a>
-                    <button class="btn btn-success" id="save-button" onclick="save()">
-                        Save status
-                    </button>
                 @else
                     <a class="btn btn-success m-1" href="add/{{ $book->id }}">Add</a>
                 @endif
