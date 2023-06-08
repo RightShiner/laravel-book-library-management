@@ -10,13 +10,13 @@
     <div class="row">
         <div class="col-3"><img src="{{ isset($book->volumeInfo->imageLinks) ? $book->volumeInfo->imageLinks->thumbnail : "" }}" width="100" /></div>
         <div class="col-9">
-            <h3>Author</h3>
+            {{-- <h3>Author</h3>
             <ul>
             @foreach($book->volumeInfo->authors as $author)
                 <li>{{ $author }}</li>
             @endforeach
             </ul>
-            <hr/>
+            <hr/> --}}
             @if($error == "")
                 <h3 class="text-success">Book removed successfully!</h3>
             @else

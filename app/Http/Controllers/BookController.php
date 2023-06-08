@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use App\Book;
 use Illuminate\Support\Facades\DB;
@@ -19,82 +18,125 @@ class BookController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function search( Request $request )
+
+    public function search(Request $request)
     {
         $search = $request->input('s');
         $books = new GoogleBooksController();
         $books = $books->searchBooks($search);
         $listedbooks = auth()->user()->books->pluck('google_id')->toArray();
-       return view('books/search',
-            compact('search','books', 'listedbooks'));
+        return view(
+            'books/search',
+            compact('search', 'books', 'listedbooks')
+        );
     }
 
-    public function view( $bookId )
+    public function create(Request $request)
     {
-        $books = new GoogleBooksController();
-        $book = $books->getBook($bookId);
-        $listedbooks = auth()->user()->books->pluck('google_id')->toArray();
-        $user_name =  DB::select("select name from users join books on users.id = books.user_id where books.google_id = ?", [$bookId]);
-        $user_name = $user_name[0]->name;
-        $status =  DB::select("select status from books join users on users.id = books.user_id where books.google_id = ?", [$bookId]);
-        $status = $status[0]->status;
-        return view('books/view',
-            compact('book', 'listedbooks', 'user_name', 'status'));
-    }
+        $error = '';
+        $title = $request->input('t');
+        $description = $request->input('d');
+        $image_url = $request->input('i');
+        parse_str(parse_url($image_url, PHP_URL_QUERY), $params);
+        $bookId = isset($params['id']) ? $params['id'] : '';
 
-    public function add( $bookId )
-    {
-        $error = "";
         $books = new GoogleBooksController();
+
         $book = $books->getBook($bookId);
         $listedbooks = auth()->user()->books->pluck('google_id')->toArray();
-        if(isset($book->error)){
-            $error = "Book Not found";
+
+        if (isset($book->error)) {
+            $error = 'Book Not found';
             return abort(404);
-        }else{
-            if(in_array($bookId,$listedbooks)){
-                $error = "Book is in your list already";
-            }else {
+        } else {
+            if (in_array($bookId, $listedbooks)) {
+                $error = 'Book is in your list already';
+            } else {
                 $userOrder = count($listedbooks) + 1;
-                $description = strlen($book->volumeInfo->description) > 100 ? substr($book->volumeInfo->description,0,100)
-                    : $book->volumeInfo->description;
+
                 auth()->user()->books()->create([
                     'google_id' => $bookId,
                     'description' => $description,
-                    'title' => $book->volumeInfo->title,
-                    'author' => addslashes(json_encode($book->volumeInfo->authors)),
-                    'isbn' => json_encode($book->volumeInfo->industryIdentifiers),
-                    'publisher' => $book->volumeInfo->publisher,
-                    'image' => isset($book->volumeInfo->imageLinks) ? $book->volumeInfo->imageLinks->thumbnail : "",
+                    'title' => $title,
+                    'image' => isset($book->volumeInfo->imageLinks) ? $book->volumeInfo->imageLinks->thumbnail : '',
                     'userOrder' => $userOrder
                 ]);
-
             }
-            return view('books/add',
-                compact('book', 'error'));
-
         }
 
+        return view(
+            'books/add',
+            compact('book', 'error')
+        );
     }
 
-
-    public function remove( $bookId )
+    public function view($bookId)
     {
-        $error = "";
         $books = new GoogleBooksController();
         $book = $books->getBook($bookId);
         $listedbooks = auth()->user()->books->pluck('google_id')->toArray();
-        // dd($book, $listedbooks);
-        if(isset($book->error)){
-            $error = "Book Not found";
+        $user_name = DB::select('select name from users join books on users.id = books.user_id where books.google_id = ?', [$bookId]);
+        $user_name = $user_name[0]->name;
+        $data = DB::select('select status, description from books join users on users.id = books.user_id where books.google_id = ?', [$bookId]);
+        $status = $data[0]->status;
+        $description = $data[0]->description;
+        return view(
+            'books/view',
+            compact('book', 'listedbooks', 'user_name', 'status', 'description')
+        );
+    }
+
+    public function add($bookId)
+    {
+        // $error = '';
+        // $books = new GoogleBooksController();
+        // $book = $books->getBook( $bookId );
+        // $listedbooks = auth()->user()->books->pluck( 'google_id' )->toArray();
+        // if ( isset( $book->error ) ) {
+        //     $error = 'Book Not found';
+        //     return abort( 404 );
+        // } else {
+        //     if ( in_array( $bookId, $listedbooks ) ) {
+        //         $error = 'Book is in your list already';
+        //     } else {
+        //         $userOrder = count( $listedbooks ) + 1;
+        //         $description = strlen( $book->volumeInfo->description ) > 100 ? substr( $book->volumeInfo->description, 0, 100 )
+        //             : $book->volumeInfo->description;
+        //         auth()->user()->books()->create( [
+        //             'google_id' => $bookId,
+        //             'description' => $description,
+        //             'title' => $book->volumeInfo->title,
+        //             // 'author' => addslashes( json_encode( $book->volumeInfo->authors ) ),
+        //             // 'isbn' => json_encode( $book->volumeInfo->industryIdentifiers ),
+        //             // 'publisher' => $book->volumeInfo->publisher,
+        //             'image' => isset( $book->volumeInfo->imageLinks ) ? $book->volumeInfo->imageLinks->thumbnail : '',
+        //             'userOrder' => $userOrder
+        // ] );
+
+        //     }
+        //     return view( 'books/add',
+        //         compact( 'book', 'error' ) );
+
+        // }
+
+    }
+
+    public function remove($bookId)
+    {
+        $error = '';
+        $books = new GoogleBooksController();
+        $book = $books->getBook($bookId);
+        $listedbooks = auth()->user()->books->pluck('google_id')->toArray();
+        // dd( $book, $listedbooks );
+        if (isset($book->error)) {
+            $error = 'Book Not found';
             return abort(404);
-        }else{
-            if(!in_array($bookId,$listedbooks)){
-                $error = "Book is not in your list";
-            }else {
+        } else {
+            if (!in_array($bookId, $listedbooks)) {
+                $error = 'Book is not in your list';
+            } else {
                 $userOrder = count($listedbooks) + 1;
                 $bookToDelete = auth()->user()->books()->where('google_id', $bookId)->first();
-
 
                 //reverte back User Order
                 $booksToReduce = auth()->user()->books()->where('userOrder', '>', $bookToDelete->userOrder)->get();
@@ -107,8 +149,10 @@ class BookController extends Controller
                 $bookToDelete->delete();
 
             }
-            return view('books/remove',
-                compact('book', 'error'));
+            return view(
+                'books/remove',
+                compact('book', 'error')
+            );
 
         }
 
@@ -124,33 +168,28 @@ class BookController extends Controller
         ]);
         //make sure this book belongs to this user
         $book = auth()->user()->books()->find($data['book_id']);
-        if(isset($book)){
+        if (isset($book)) {
             $userbookscount = auth()->user()->books()->count();
-            if(isset($data['down'])){
+            if (isset($data['down'])) {
 
                 $oldValue = $book->userOrder;
                 $newValue = $oldValue + 1;
 
-            }else{
+            } else {
                 $oldValue = $book->userOrder;
                 $newValue = $oldValue - 1;
             }
 
             //make sure newer value is still in range
-            if($newValue <= $userbookscount && $newValue > 0){
+            if ($newValue <= $userbookscount && $newValue > 0) {
 
-                $bookToUpdate = auth()->user()->books()->where('userOrder', $newValue );
-                $bookToUpdate->update(['userOrder'=>$oldValue]);
-                $book->update(['userOrder'=>$newValue]);
+                $bookToUpdate = auth()->user()->books()->where('userOrder', $newValue);
+                $bookToUpdate->update(['userOrder' => $oldValue]);
+                $book->update(['userOrder' => $newValue]);
             }
         }
 
-
-
-
-
         return redirect('/home?sort=userOrder&direction=asc');
     }
-
 
 }

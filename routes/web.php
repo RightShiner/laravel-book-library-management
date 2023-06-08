@@ -21,6 +21,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/book/search', 'BookController@search');
+Route::get('/book/create', 'BookController@create');
 Route::get('/book/{bookId}', 'BookController@view');
 Route::get('/book/add/{bookId}', 'BookController@add');
 Route::get('/book/remove/{bookId}', 'BookController@remove');

@@ -9,7 +9,8 @@
         </div>
         <div class="row">
             <div class="col-9">You have <strong>{{ $books->count() }}</strong> book/s in your library.</div>
-            <div class="col-3"><button class="btn btn-primary" data-toggle="modal" data-target="#searchmodal">Add book</button>
+            {{-- <div class="col-3"><button class="btn btn-primary" data-toggle="modal" data-target="#searchmodal">Add book</button> --}}
+            <div class="col-3"><button class="btn btn-primary" data-toggle="modal" data-target="#createmodal">Add book</button>
             </div>
 
         </div>
@@ -93,6 +94,33 @@
                             <form action="book/search" method="get">
                                 <input type="text" name="s" placeholder="search books" class="form-control" />
                                 <button type="submit" class="btn btn-primary m-2">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" tabindex="-1" role="dialog" id="createmodal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Book</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <form action="book/create" method="get">
+                                <input type="text" name="t" placeholder="title" class="form-control mb-4"
+                                    maxlength="128" />
+                                <textarea name="d" placeholder="description" class="form-control mb-4"></textarea>
+                                <input type="text" name="i" placeholder="image url" class="form-control mb-4" />
+                                <button type="submit" class="btn btn-primary m-2">Create</button>
                             </form>
                         </div>
                     </div>

@@ -10,15 +10,6 @@
     <div class="row">
         <div class="col-3"><img src="{{ isset($book->volumeInfo->imageLinks) ? $book->volumeInfo->imageLinks->thumbnail : "" }}" width="100" /></div>
         <div class="col-9">
-            <h3>Author</h3>
-            <ul>
-                @if(isset($book->volumeInfo->authors))
-                    @foreach($book->volumeInfo->authors as $author)
-                        <li>{{ $author }}</li>
-                    @endforeach
-                @endif
-            </ul>
-            <hr/>
             @if($error == "")
                 <h3 class="text-success">Book Added successfully!</h3>
             @else

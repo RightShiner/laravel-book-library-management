@@ -12,7 +12,7 @@
                 </div>
                 <div>
                     @if ($status)
-                        <div><span class="font-weight-bold">{{$user_name}}</span> checked this out</div>
+                        <div><span class="font-weight-bold">{{ $user_name }}</span> checked this out</div>
                     @else
                         <input class="" type="checkbox">
                     @endif
@@ -23,7 +23,6 @@
                     <a class="btn btn-danger m-1" href="remove/{{ $book->id }}">Remove</a>
                 @else
                     <a class="btn btn-success m-1" href="add/{{ $book->id }}">Add</a>
-
                 @endif
             </div>
 
@@ -51,8 +50,8 @@
             </ul>
             <hr/> --}}
                 <h3>Description</h3>
-                <div>{!! $book->volumeInfo->description !!} </div>
                 <hr />
+                <div>{!! $description !!} </div>
             </div>
         </div>
 
