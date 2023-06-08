@@ -17,6 +17,7 @@ class CreateBooksTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('google_id');
+            $table->unsignedBigInteger('status');
             $table->text('description');
             $table->text('title');
             $table->text('author');
