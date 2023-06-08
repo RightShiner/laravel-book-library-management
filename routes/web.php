@@ -20,8 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/books/search', 'BookController@search');
+Route::get('/book/search', 'BookController@search');
 Route::get('/book/{bookId}', 'BookController@view');
-Route::get('/books/add/{bookId}', 'BookController@add');
-Route::get('/books/remove/{bookId}', 'BookController@remove');
+Route::get('/book/add/{bookId}', 'BookController@add');
+Route::get('/book/remove/{bookId}', 'BookController@remove');
 Route::post('/books/order', 'BookController@store');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Book;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -33,8 +34,12 @@ class BookController extends Controller
         $books = new GoogleBooksController();
         $book = $books->getBook($bookId);
         $listedbooks = auth()->user()->books->pluck('google_id')->toArray();
+        $user_name =  DB::select("select name from users join books on users.id = books.user_id where books.google_id = ?", [$bookId]);
+        $user_name = $user_name[0]->name;
+        $status =  DB::select("select status from books join users on users.id = books.user_id where books.google_id = ?", [$bookId]);
+        $status = $status[0]->status;
         return view('books/view',
-            compact('book', 'listedbooks'));
+            compact('book', 'listedbooks', 'user_name', 'status'));
     }
 
     public function add( $bookId )
@@ -79,6 +84,7 @@ class BookController extends Controller
         $books = new GoogleBooksController();
         $book = $books->getBook($bookId);
         $listedbooks = auth()->user()->books->pluck('google_id')->toArray();
+        // dd($book, $listedbooks);
         if(isset($book->error)){
             $error = "Book Not found";
             return abort(404);

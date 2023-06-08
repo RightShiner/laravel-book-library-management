@@ -21,8 +21,8 @@
                         <th scope="col">Status</th>
                         <th scope="col">Book cover</th>
                         <th scope="col">@sortablelink('title', 'Title')</th>
-                        <th scope="col">@sortablelink('author', 'Author')</th>
-                        <th scope="col">Actions</th>
+                        {{-- <th scope="col">@sortablelink('author', 'Author')</th> --}}
+                        {{-- <th scope="col">Actions</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -41,7 +41,7 @@
                                 </form>
                             </td>
                             <td>
-                                <input class="form-check-input" type="checkbox" {{ $book->status ? 'checked' : '' }}>
+                                <input class="" type="checkbox" {{ $book->status ? 'checked' : '' }}>
                             </td>
                             <td>
                                 <a class="" href="book/{{ $book->google_id }}">
@@ -50,12 +50,12 @@
                             </td>
                             <td>
                                 <h5>{{ $book->title }}</h5>
-                                @if (isset($book->description))
+                                {{-- @if (isset($book->description))
                                     <p>{{ strlen($book->description) > 100 ? substr($book->description, 0, 100) . '...' : $book->description }}
                                     </p>
-                                @endif
+                                @endif --}}
                             </td>
-                            <td>
+                            {{-- <td>
                                 <ul>
                                     @php
                                         $authors = json_decode(stripslashes($book->author));
@@ -67,11 +67,11 @@
 
                                 </ul>
 
-                            </td>
-                            <td>
-                                {{-- <a class="btn btn-primary m-1" href="books/view/{{ $book->google_id }}">View</a> --}}
+                            </td> --}}
+                            {{-- <td>
+                                <a class="btn btn-primary m-1" href="books/view/{{ $book->google_id }}">View</a>
                                 <a class="btn btn-danger m-1" href="books/remove/{{ $book->google_id }}">Remove</a>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="modal-body">
                         <div>
-                            <form action="books/search" method="get">
+                            <form action="book/search" method="get">
                                 <input type="text" name="s" placeholder="search books" class="form-control" />
                                 <button type="submit" class="btn btn-primary m-2">Search</button>
                             </form>
